@@ -11,4 +11,6 @@ public interface EstoqueMapper {
     EstoqueMapper INSTANCE = Mappers.getMapper(EstoqueMapper.class);
 
     EstoqueDTO estoqueTOEstoqueDTO (Estoque estoque);
+
+    Estoque dTOtoEstoque(EstoqueDTO estoqueDTO);
 }
