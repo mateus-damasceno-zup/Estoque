@@ -1,16 +1,24 @@
 package com.catalisa.estoque.mapping;
 
-import com.catalisa.estoque.dto.EstoqueDTO;
-import com.catalisa.estoque.model.Estoque;
+import com.catalisa.estoque.dto.ProdutosDTO;
+import com.catalisa.estoque.model.Produtos;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface EstoqueMapper {
+@Mapper(componentModel = "spring")
+@Component
+public interface ProdutoMapper {
 
-    EstoqueMapper INSTANCE = Mappers.getMapper(EstoqueMapper.class);
+    ProdutoMapper INSTANCE = Mappers.getMapper(ProdutoMapper.class);
 
-    EstoqueDTO estoqueTOEstoqueDTO (Estoque estoque);
+    @Mapping(target = "produtos.id", ignore = true)
+    @Mapping(target = "entrada", source = "entradas")
+    @Mapping(target = "saida", source = "saidas")
+    ProdutosDTO produtoParaprodutoDTO(Produtos produtos);
 
-    Estoque dTOtoEstoque(EstoqueDTO estoqueDTO);
+    Produtos dTOParaProduto(ProdutosDTO produtosDTO);
+
 }
+

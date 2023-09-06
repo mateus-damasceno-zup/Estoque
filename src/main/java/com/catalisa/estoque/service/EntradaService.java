@@ -1,8 +1,11 @@
 package com.catalisa.estoque.service;
 
+import com.catalisa.estoque.dto.EntradaDTO;
 import com.catalisa.estoque.dto.ProdutosDTO;
-import com.catalisa.estoque.mapping.ProdutoMapper;
+import com.catalisa.estoque.mapping.EntradaMapper;
+import com.catalisa.estoque.model.Entrada;
 import com.catalisa.estoque.model.Produtos;
+import com.catalisa.estoque.repository.EntradaRepository;
 import com.catalisa.estoque.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,58 +15,47 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProdutoService {
+public class EntradaService {
 
     @Autowired
-    private final ProdutoRepository produtoRepository;
+    private final EntradaRepository entradaRepository;
 
     @Autowired
-    public ProdutoMapper produtoMapper;
+    public EntradaMapper entradaMapper;
 
 
-    public ProdutoService(ProdutoRepository produtoRepository, ProdutoMapper produtoMapper) {
-        this.produtoRepository = produtoRepository;
-        this.produtoMapper = produtoMapper;
+    public EntradaService(EntradaRepository entradaRepository, EntradaMapper entradaMapper) {
+        this.entradaRepository = entradaRepository;
+        this.entradaMapper = entradaMapper;
     }
 
-    public List<ProdutosDTO> listaProdutos(){
-        Iterable<Produtos> produtosLista = produtoRepository.findAll();
-        List<ProdutosDTO> produtosDTOList = new ArrayList<>();
-        for (Produtos produtos : produtosLista) {
-            ProdutosDTO produtosDTOs = produtoMapper.produtoParaprodutoDTO(produtos);
-            produtosDTOList.add(produtosDTOs);
-            
+    public List<EntradaDTO> listaEntradas() {
+        Iterable<Entrada> entradaList = entradaRepository.findAll();
+        List<EntradaDTO> entradaDTOList = new ArrayList<>();
+        for (Entrada entrada : entradaList) {
+            EntradaDTO entradaDTO = entradaMapper.entradaParaentradaDTO(entrada);
+            entradaDTOList.add(entradaDTO);
+
         }
-        return produtosDTOList;
+        return entradaDTOList;
+    }
+    public EntradaDTO cadastraEntrada(EntradaDTO entradaDTO) {
+        Entrada entrada = entradaMapper.dTOParaEntrada(entradaDTO);
+        Entrada entradaSaved = entradaRepository.save(entrada);
+        return entradaMapper.entradaParaentradaDTO(entradaSaved);
     }
 
-
-    public Optional<ProdutosDTO> getProdutoById(Long id) {
-        Optional<Produtos> produto = produtoRepository.findById(id);
-        if (produto.isEmpty()) {
+    public Optional<EntradaDTO> getEntradaById(Long id) {
+        Optional<Entrada> entrada = entradaRepository.findById(id);
+        if (entrada.isEmpty()) {
 
             return Optional.empty();
         }
-        return produto.map(p-> produtoMapper.produtoParaprodutoDTO(p));
-    }
-    public ProdutosDTO cadastraProduto(ProdutosDTO produtosDTO) {
-        Produtos produtos = produtoMapper.dTOParaProduto(produtosDTO);
-        Produtos produtosSaved = produtoRepository.save(produtos);
-        return produtoMapper.produtoParaprodutoDTO(produtosSaved);
+        return entrada.map(p -> entradaMapper.entradaParaentradaDTO(p));
     }
 
-    public ProdutosDTO editaProduto(Long id,ProdutosDTO produtosDTO){
-        Optional<Produtos> produto = produtoRepository.findById(id);
-        if(produto.isPresent()){
-           Produtos produtos= produtoMapper.dTOParaProduto(produtosDTO);
-            Produtos produtosSalvo = produtoRepository.save(produtos);
-            return produtoMapper.produtoParaprodutoDTO(produtosSalvo);
-        }
-        return null;
-
-    }
-    public void deletaProduto(Long id) {
-        produtoRepository.deleteById(id);
+    public void deletaEntrada(Long id) {
+        entradaRepository.deleteById(id);
     }
 
 

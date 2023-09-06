@@ -1,9 +1,9 @@
 package com.catalisa.estoque.mapping;
 
 import com.catalisa.estoque.dto.EntradaDTO;
-import com.catalisa.estoque.dto.ProdutosDTO;
+import com.catalisa.estoque.dto.SaidaDTO;
 import com.catalisa.estoque.model.Entrada;
-import com.catalisa.estoque.model.Produtos;
+import com.catalisa.estoque.model.Saida;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -11,14 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 @Component
-public interface EntradaMapper {
+public interface SaidaMapper {
 
-    EntradaMapper INSTANCE = Mappers.getMapper(EntradaMapper.class);
+    SaidaMapper INSTANCE = Mappers.getMapper(SaidaMapper.class);
 
-    @Mapping(target = "produtos.id", ignore = true)
-    EntradaDTO entradaParaentradaDTO(Entrada entrada);
+    @Mapping(target = "saida.id", ignore = true)
+    @Mapping(target = "produtoId", source = "produtos.id")
+    SaidaDTO saidaParaSaidaDTO(Saida saida);
 
-    Entrada dTOParaEntrada(EntradaDTO entradaDTO);
+    Saida dTOParaSaida(SaidaDTO saidaDTO);
 
 }
 

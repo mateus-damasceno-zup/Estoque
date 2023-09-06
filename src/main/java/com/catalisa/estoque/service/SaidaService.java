@@ -1,11 +1,12 @@
 package com.catalisa.estoque.service;
 
 import com.catalisa.estoque.dto.EntradaDTO;
-import com.catalisa.estoque.mapping.EntradaMapper;
+import com.catalisa.estoque.dto.SaidaDTO;
+import com.catalisa.estoque.mapping.SaidaMapper;
 import com.catalisa.estoque.model.Entrada;
-import com.catalisa.estoque.model.Produtos;
-import com.catalisa.estoque.repository.EntradaRepository;
+import com.catalisa.estoque.model.Saida;
 import com.catalisa.estoque.repository.ProdutoRepository;
+import com.catalisa.estoque.repository.SaidaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,46 +15,43 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EntradaService {
+public class SaidaService {
 
     @Autowired
-    private final EntradaRepository entradaRepository;
-    @Autowired
-    private final ProdutoRepository produtoRepository;
+    private final SaidaRepository saidaRepository;
 
     @Autowired
-    public EntradaMapper entradaMapper;
+    public SaidaMapper saidaMapper;
 
 
-    public EntradaService(EntradaRepository entradaRepository, ProdutoRepository produtoRepository, EntradaMapper entradaMapper) {
-        this.entradaRepository = entradaRepository;
-        this.produtoRepository = produtoRepository;
-        this.entradaMapper = entradaMapper;
+    public SaidaService(SaidaRepository saidaRepository,SaidaMapper saidaMapper) {
+        this.saidaRepository = saidaRepository;
+        this.saidaMapper = saidaMapper;
     }
 
-    public List<EntradaDTO> listaEntradas() {
-        Iterable<Entrada> entradaList = entradaRepository.findAll();
-        List<EntradaDTO> entradaDTOList = new ArrayList<>();
-        for (Entrada entrada : entradaList) {
-            EntradaDTO entradaDTO = entradaMapper.entradaParaentradaDTO(entrada);
-            entradaDTOList.add(entradaDTO);
+    public List<SaidaDTO> listaSaidas() {
+        Iterable<Saida> saidaList = saidaRepository.findAll();
+        List<SaidaDTO> saidaDTOList = new ArrayList<>();
+        for (Saida saida : saidaList) {
+            SaidaDTO saidaDTO = saidaMapper.saidaParaSaidaDTO(saida);
+            saidaDTOList.add(saidaDTO);
 
         }
-        return entradaDTOList;
+        return saidaDTOList;
     }
 
 
-    public Optional<EntradaDTO> getEntradaById(Long id) {
-        Optional<Entrada> entrada = entradaRepository.findById(id);
-        if (entrada.isEmpty()) {
+    public Optional<SaidaDTO> getSaidaById(Long id) {
+        Optional<Saida> saida = saidaRepository.findById(id);
+        if (saida.isEmpty()) {
 
             return Optional.empty();
         }
-        return entrada.map(p -> entradaMapper.entradaParaentradaDTO(p));
+        return saida.map(p -> saidaMapper.saidaParaSaidaDTO(p));
     }
 
-    public void deletaEntrada(Long id) {
-        entradaRepository.deleteById(id);
+    public void deletaSaida(Long id) {
+        saidaRepository.deleteById(id);
     }
 
 

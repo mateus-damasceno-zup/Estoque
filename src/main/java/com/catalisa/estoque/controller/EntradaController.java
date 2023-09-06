@@ -1,11 +1,15 @@
 package com.catalisa.estoque.controller;
 
 import com.catalisa.estoque.dto.EntradaDTO;
-import com.catalisa.estoque.dto.ProdutosDTO;
-import com.catalisa.estoque.dto.SaidaDTO;
-import com.catalisa.estoque.service.ProdutoService;
+
+import com.catalisa.estoque.service.EntradaService;
+
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,50 +17,32 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/produtos")
-public class ProdutosController {
+@RequestMapping(value="/entradas")
+@Tag(name="Entrada de produtos")
+public class EntradaController {
 
     @Autowired
-    ProdutoService produtoService;
+    EntradaService entradaService;
 
     @GetMapping
-    public ResponseEntity<List<ProdutosDTO>> listaProdutos(){
-        return ResponseEntity.ok(produtoService.listaProdutos());
+    @Operation(summary = "Busca todas as entradas de produtos", method = "GET")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"))
+    public ResponseEntity<List<EntradaDTO>> listaEntrada(){
+        return ResponseEntity.ok(entradaService.listaEntradas());
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<ProdutosDTO>> getProdutoPorId(@PathVariable Long id){
+    public ResponseEntity<Optional<EntradaDTO>> getEntradaPorId(@PathVariable Long id){
 
-        return ResponseEntity.ok(produtoService.getProdutoById(id));
+        return ResponseEntity.ok(entradaService.getEntradaById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<ProdutosDTO> cadastraProduto(@RequestBody ProdutosDTO produtosDTO){
-        ProdutosDTO produtoNovo = produtoService.cadastraProduto(produtosDTO);
-        return new ResponseEntity<>(produtoNovo, HttpStatus.CREATED);
-    }
-
-    @PutMapping(path="/{id}")
-    public ProdutosDTO atulizaProduto(@PathVariable Long id, @RequestBody ProdutosDTO produtosDTO){
-        return produtoService.editaProduto(id,produtosDTO);
-    }
 
     @DeleteMapping(path="/{id}")
-    public void deletaProduto (@PathVariable Long id){
-        produtoService.deletaProduto(id);
+    public void deletaEntrada (@PathVariable Long id){
+        entradaService.deletaEntrada(id);
     }
 
-
-    @PostMapping("/entrada")
-    public ResponseEntity<ProdutosDTO> registrarEntrada(@RequestBody EntradaDTO entradaDTO) {
-        ProdutosDTO produtoAtualizado = produtoService.entradaEstoque(entradaDTO);
-        return ResponseEntity.ok(produtoAtualizado);
-    }
-    @PostMapping("/saida")
-    public ResponseEntity<ProdutosDTO> registrarSaida(@RequestBody SaidaDTO saidaDTO) {
-        ProdutosDTO produtoAtualizado = produtoService.saidaEstoque(saidaDTO);
-        return ResponseEntity.ok(produtoAtualizado);
-    }
 
 
 }

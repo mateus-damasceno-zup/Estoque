@@ -1,4 +1,4 @@
-package com.catalisa.estoque.model.factory;
+package com.catalisa.estoque.model;
 
 import com.catalisa.estoque.model.Produtos;
 import jakarta.persistence.*;
@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Entrada {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class Entrada {
     @JoinColumn(name = "produto_id")
     private Produtos produtos;
     private Integer quantidade;
-    private LocalDateTime data;
+    private String data;
 
 
 }
